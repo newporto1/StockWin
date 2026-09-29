@@ -30,6 +30,7 @@ import json
 import datetime as dt
 from dataclasses import dataclass
 
+import pandas as pd
 import yfinance as yf
 import requests
 
@@ -69,6 +70,11 @@ def fetch_history(ticker: str, days: int = 60):
     df = yf.download(ticker, period=f"{days}d", interval="1d", progress=False, auto_adjust=False)
     if df is None or df.empty:
         return None
+    # Versões recentes do yfinance devolvem colunas em multi-index (Preço, Ticker)
+    # mesmo para um único símbolo — achata para o formato simples que o resto
+    # do script espera (Close, High, Low, Volume...).
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
     return df
 
 
