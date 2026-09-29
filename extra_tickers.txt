@@ -1,0 +1,5 @@
+# Um ticker por linha. Linhas que começam com # são ignoradas.
+# Para adicionar um novo candidato: escreve o símbolo aqui e faz commit.
+# Não precisas de tocar no stockwin.py para isto.
+NBIS
+MP
