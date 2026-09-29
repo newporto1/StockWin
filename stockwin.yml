@@ -1,0 +1,25 @@
+name: StockWin diário
+
+on:
+  schedule:
+    # 22:00 UTC = depois do fecho da bolsa dos EUA (16:00 ET), todos os dias úteis
+    - cron: "0 22 * * 1-5"
+  workflow_dispatch: {}   # permite correr manualmente pelo botão "Run workflow"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: pip install yfinance requests
+
+      - name: Correr o scanner
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python stockwin.py
